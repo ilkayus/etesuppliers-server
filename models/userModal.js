@@ -14,7 +14,9 @@ const userSchema = new mongoose.Schema({
     lowercase: true,
     validate: [validator.isEmail, "Please provide a valid email!"],
   },
-  photo: String,
+  photo: {
+    type: String,
+  },
   password: {
     type: String,
     required: [true, "Provide a password"],
@@ -32,21 +34,33 @@ const userSchema = new mongoose.Schema({
       message: "Passwords are not the same",
     },
   },
-  favorites: [
+  role: {
+    type: String,
+    enum: ["user", "manager", "admin"],
+    default: "user",
+  },
+  companies: [
     {
       type: mongoose.Schema.ObjectId,
-      ref: "Cocktail",
+      ref: "Company",
     },
   ],
-  comments: [
+  products: [
     {
       type: mongoose.Schema.ObjectId,
-      ref: "Comment",
+      ref: "Product",
     },
   ],
-  passwordChangedAt: Date,
-  passwordResetToken: String,
-  passwordResetExpires: Date,
+  passwordChangedAt: {
+    type: Date,
+    default: new Date(),
+  },
+  passwordResetToken: {
+    type: String,
+  },
+  passwordResetExpires: {
+    type: Date,
+  },
 });
 
 userSchema.pre("save", async function (next) {

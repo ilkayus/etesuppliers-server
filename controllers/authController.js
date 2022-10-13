@@ -14,7 +14,6 @@ const signUp = catchAsync(async (req, res, next) => {
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
     passwordChangedAt: req.body.passwordChangedAt,
-    photo: req.body.photo,
   });
   createSendToken(newUser, 201, res);
 });
@@ -46,15 +45,11 @@ const createSendToken = (user, statusCode, res) => {
     email: user.email,
     username: user.username,
     photo: user.photo,
+    role: user.role,
+    companies: user.companies,
+    products: user.products,
   });
 };
-
-exports.signInWithGoogleOAuth = catchAsync(async (req, res, next) => {
-  const email = req.body.email;
-  const user = await User.findOne({ email });
-  if (!user) signUp(req, res, next);
-  else signIn(req, res, next);
-});
 
 const signIn = catchAsync(async (req, res, next) => {
   const { password, email } = req.body;
@@ -69,16 +64,7 @@ const signIn = catchAsync(async (req, res, next) => {
   if (!correct) {
     return next(new AppError("Incorrect email or password", 401));
   }
-  const token = signToken(user._id);
-  // response
-  res.status(200).json({
-    status: "success",
-    token,
-    _id: user._id,
-    email: user.email,
-    username: user.username,
-    photo: user.photo,
-  });
+  createSendToken(user, 200, res);
 });
 
 exports.hasUser = catchAsync(async (req, res, next) => {
@@ -126,13 +112,6 @@ exports.protect = catchAsync(async (req, res, next) => {
   // Grant access to protected route.
   req.user = currentUser;
   next();
-});
-
-exports.googleOAuth = catchAsync(async (req, res, next) => {
-  res.status(200).json({
-    status: "success",
-    clientId: process.env.OauthClientID,
-  });
 });
 
 exports.signUp = signUp;
