@@ -28,12 +28,10 @@ const productSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: "User",
   },
-  company: [
-    {
-      type: mongoose.Schema.ObjectId,
-      ref: "Company",
-    },
-  ],
+  company: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Company",
+  },
   createdAt: {
     type: Date,
     default: new Date(),
