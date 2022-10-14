@@ -4,6 +4,7 @@ const productSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
   category: {
     type: String,
@@ -31,6 +32,7 @@ const productSchema = new mongoose.Schema({
   company: {
     type: mongoose.Schema.ObjectId,
     ref: "Company",
+    required: true,
   },
   createdAt: {
     type: Date,

@@ -1,34 +1,30 @@
 const express = require("express");
 const authController = require("../controllers/authController");
-const companyController = require("../controllers/companyController");
+const productController = require("../controllers/productController");
 
 const router = express.Router();
 
 router.get(
   "/getone/:id",
   authController.protect,
-  companyController.getOneCompany
+  productController.getOneProduct
 );
-router.get(
-  "/getall",
-  authController.protect,
-  companyController.getAllCompanies
-);
+router.get("/getall", authController.protect, productController.getAllProducts);
 router.get(
   "/getlast",
   authController.protect,
-  companyController.getLastCompanies
+  productController.getLastProducts
 );
-router.post("/new", authController.protect, companyController.createCompany);
+router.post("/new", authController.protect, productController.createProduct);
 router.delete(
   "/remove/:id",
   authController.protect,
-  companyController.deleteCompany
+  productController.deleteProduct
 );
 router.patch(
   "/update/:id",
   authController.protect,
-  companyController.updateCompany
+  productController.updateProduct
 );
 
 module.exports = router;
