@@ -12,6 +12,7 @@ const productSchema = new mongoose.Schema({
   },
   photo: {
     type: String,
+    default: "https://dummyimage.com/256x256/cccccc/000.png",
   },
   amount: {
     type: Number,
@@ -38,6 +39,17 @@ const productSchema = new mongoose.Schema({
     type: Date,
     default: new Date(),
   },
+});
+
+productSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "owner",
+    select: "username",
+  }).populate({
+    path: "company",
+    select: "name",
+  });
+  next();
 });
 
 const Product = mongoose.model("Product", productSchema);

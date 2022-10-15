@@ -13,6 +13,7 @@ const companySchema = new mongoose.Schema({
   },
   photo: {
     type: String,
+    default: "https://dummyimage.com/256x256/cccccc/000.png",
   },
   incorporationCountry: {
     type: String,
@@ -46,6 +47,14 @@ const companySchema = new mongoose.Schema({
     type: Date,
     default: new Date(),
   },
+});
+
+companySchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "owner",
+    select: "username",
+  });
+  next();
 });
 
 const Company = mongoose.model("Company", companySchema);
