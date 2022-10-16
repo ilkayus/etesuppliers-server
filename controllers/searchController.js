@@ -33,7 +33,7 @@ exports.getHomePageLogs = catchAsync(async (req, res, next) => {
   const companies = await Company.find(query);
   const products = await Product.find(query);
   const logs = await ActivityLog.find(query);
-  const sysLogs = logs.slice(0, -10).map((el) => el.activity);
+  const sysLogs = logs.slice(-10).map((el) => el.activity);
   const compLogs = companies
     .slice(-5)
     .map((company) => `${company.name} added by ${company.owner.username}`);
