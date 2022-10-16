@@ -68,7 +68,7 @@ const signIn = catchAsync(async (req, res, next) => {
 });
 
 exports.hasUser = catchAsync(async (req, res, next) => {
-  console.log(req.body, req.params);
+  // console.log(req.body, req.params);
   let token;
   if (
     req.headers.authorization &&

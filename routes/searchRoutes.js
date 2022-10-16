@@ -15,4 +15,12 @@ router.get(
   searchController.getCompanyList
 );
 
+router.get(
+  "/searchbarlist",
+  authController.protect,
+  searchController.getSearchBarList
+);
+
+router.get("/logs", authController.protect, searchController.getHomePageLogs);
+
 module.exports = router;

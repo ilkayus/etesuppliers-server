@@ -2,10 +2,11 @@ const User = require("../models/userModal");
 const mongoose = require("mongoose");
 const catchAsync = require("../utils/catchAsync");
 const Company = require("../models/companyModal");
+const Product = require("../models/productModal");
 const AppError = require("../utils/appError");
 
 exports.createCompany = catchAsync(async (req, res, next) => {
-  console.log(req.body, req.user);
+  //console.log(req.body, req.user);
   const newCompany = await Company.create({
     name: req.body.name,
     legalNumber: req.body.legalNumber,
@@ -26,6 +27,7 @@ exports.createCompany = catchAsync(async (req, res, next) => {
 exports.deleteCompany = catchAsync(async (req, res, next) => {
   const companyId = mongoose.Types.ObjectId(req.params.id);
   const company = await Company.findByIdAndDelete(companyId);
+  await Product.deleteMany({ company: companyId });
 
   if (!company)
     return next(new AppError("No document found with that ID", 404));
@@ -38,7 +40,7 @@ exports.deleteCompany = catchAsync(async (req, res, next) => {
 });
 
 exports.updateCompany = catchAsync(async (req, res, next) => {
-  console.log(req.params.body);
+  // console.log(req.params.body);
   const companyId = mongoose.Types.ObjectId(req.params.id);
   const company = await Company.findByIdAndUpdate(companyId, req.body, {
     new: true,

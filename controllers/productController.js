@@ -5,7 +5,7 @@ const Product = require("../models/productModal");
 const AppError = require("../utils/appError");
 
 exports.createProduct = catchAsync(async (req, res, next) => {
-  console.log(req.body, req.user);
+  //console.log(req.body, req.user);
   const newProduct = await Product.create({
     ...req.body,
     owner: req.user._id,
@@ -32,7 +32,7 @@ exports.deleteProduct = catchAsync(async (req, res, next) => {
 });
 
 exports.updateProduct = catchAsync(async (req, res, next) => {
-  console.log(req.params.body);
+  //console.log(req.params.body);
   const productId = mongoose.Types.ObjectId(req.params.id);
   const product = await Product.findByIdAndUpdate(productId, req.body, {
     new: true,
