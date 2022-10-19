@@ -8,14 +8,22 @@ const dotenv = require("dotenv");
 const sendEmail = require("../utils/email");
 
 const signUp = catchAsync(async (req, res, next) => {
-  const newUser = await User.create({
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
-    passwordConfirm: req.body.passwordConfirm,
-    passwordChangedAt: req.body.passwordChangedAt,
-  });
-  createSendToken(newUser, 201, res);
+  try {
+    const newUser = await User.create({
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password,
+      passwordConfirm: req.body.passwordConfirm,
+      passwordChangedAt: req.body.passwordChangedAt,
+    });
+    createSendToken(newUser, 201, res);
+  } catch (err) {
+    if (err.code == 11000)
+      return next(
+        new AppError("There is already a user with that email address.", 409)
+      );
+    return next(new AppError(err, 400));
+  }
 });
 
 const signToken = (id) => {

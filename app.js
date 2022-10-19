@@ -3,6 +3,10 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+
+const AppError = require("./utils/appError");
+const globalErrorHandler = require("./controllers/errorController");
+
 const userRouter = require("./routes/userRoutes");
 const companyRouter = require("./routes/companyRoutes");
 const productRouter = require("./routes/productRoutes");
@@ -35,21 +39,10 @@ app.use("/api/v1/products", productRouter);
 app.use("/api/v1/search", searchRouter);
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  // next(createError(404));
-  next();
+app.all("*", (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
-// error handler
-app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  //res.render("error");
-  next(err);
-});
+app.use(globalErrorHandler);
 
 module.exports = app;
