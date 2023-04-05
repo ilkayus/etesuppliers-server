@@ -13,7 +13,7 @@ dotenv.config({ path: "./.env" });
 const app = require("./app");
 
 mongoose
-  .connect(process.env.etesuppliersDB_CONNECTION_STRING, {
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
